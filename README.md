@@ -114,3 +114,13 @@ Working on this project has given me a solid understanding of how to build a RES
 For more details, be sure to check out the [REST API project page](https://teamtreehouse.com/library/rest-api-project).
 
 Happy coding!
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+## Contact
+
+If you have any questions or suggestions, feel free to contact the project maintainer:
+
+Name: Jeph Mari Daligdig Email: daligdig.jephmari@gmail.com GitHub: greatxrider
