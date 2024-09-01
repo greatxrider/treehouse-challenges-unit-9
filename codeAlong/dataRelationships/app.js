@@ -14,6 +14,7 @@ let vinDiesel;
 let eliMarienthal;
 let craigTNelson;
 let hollyHunter;
+
 let theIronGiant;
 let theIncredibles;
 
@@ -70,16 +71,35 @@ console.log('Testing the connection to the database...');
         title: 'The Incredibles',
         releaseYear: 2004,
         directorPersonId: bradBird.id,
-      })
+      }),
     ]);
     console.log(JSON.stringify(movieInstances, null, 2));
 
+    // Update the global variables for the movie instances
+    [theIronGiant, theIncredibles] = movieInstances;
+
     // Retrieve movies
-    const movies = await Movie.findAll();
+    const movies = await Movie.findAll({
+      include: [
+        {
+          model: Person,
+          as: 'director',
+        },
+      ],
+    });
     console.log(movies.map(movie => movie.get({ plain: true })));
 
     // Retrieve people
-    const people = await Person.findAll();
+    const people = await Person.findAll(
+      {
+        include: [
+          {
+            model: Movie,
+            as: 'director',
+          },
+        ],
+      },
+    );
     console.log(people.map(person => person.get({ plain: true })));
 
     process.exit();
