@@ -2,7 +2,7 @@
 const Sequelize = require('sequelize');
 
 module.exports = (sequelize) => {
-  class Person extends Sequelize.Model {}
+  class Person extends Sequelize.Model { }
   Person.init({
     id: {
       type: Sequelize.INTEGER,
@@ -21,6 +21,12 @@ module.exports = (sequelize) => {
 
   Person.associate = (models) => {
     // TODO Add associations.
+    Person.hasMany(models.Movie, {
+      foreignKey: {
+        fieldName: 'directorPersonId',
+        allowNull: false,
+      },
+    });
   };
 
   return Person;
