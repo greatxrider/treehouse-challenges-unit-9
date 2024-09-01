@@ -30,6 +30,12 @@ quotesRouter.get('/quotes/:id', asyncHandler(async (req, res) => {
     }
 }));
 
+// Send a GET Request to /quotes/quote/random READ (view) a random quote
+quotesRouter.get('/quotes/quote/random', asyncHandler(async (req, res, next) => {
+    const quote = await records.getRandomQuote();
+    res.json(quote);
+}))
+
 // Send a POST request to /quotes to CREATE a new quote
 quotesRouter.post('/quotes', asyncHandler(async (req, res) => {
     if (req.body.author && req.body.quote) {
@@ -60,10 +66,12 @@ quotesRouter.put('/quotes/:id', asyncHandler(async (req, res) => {
 // Send a DELETE request to /quotes/:id DELETE a quote
 quotesRouter.delete("/quotes/:id", asyncHandler(async (req, res, next) => {
     const quote = await records.getQuote(req.params.id);
-    records.deleteQuote(quote);
-    res.status(204).end();
+    if (quote) {
+        await records.deleteQuote(quote);
+        res.status(204).end();
+    } else {
+        res.status(404).json({ message: "Quote not found." });
+    }
 }));
-
-// Send a GET Request to /quotes/quote/random READ (view) a random quote
 
 module.exports = quotesRouter;
