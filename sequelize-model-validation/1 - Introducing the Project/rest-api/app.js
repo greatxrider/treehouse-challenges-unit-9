@@ -3,6 +3,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const routes = require('./routes');
+const sequelize = require('./models').sequelize; // import Sequelize
 
 // Create the Express app.
 const app = express();
@@ -16,7 +17,7 @@ app.use(morgan('dev'));
 // Setup a friendly greeting for the root route.
 app.get('/', (req, res) => {
   res.json({
-    message: 'Welcome to the REST API Validation with Express project!',
+    message: 'Welcome to the REST API & Sequelize model validation project!',
   });
 });
 
@@ -43,7 +44,20 @@ app.use((err, req, res, next) => {
 // Set our port.
 app.set('port', process.env.PORT || 5000);
 
-// Start listening on our port.
-const server = app.listen(app.get('port'), () => {
-  console.log(`Express server is listening on port ${server.address().port}`);
-});
+// Test the database connection.
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+})();
+
+// Sequelize model synchronization, then start listening on our port.
+sequelize.sync({ force: true })
+  .then( () => {
+    const server = app.listen(app.get('port'), () => {
+      console.log(`Express server is listening on port ${server.address().port}`);
+    });
+  });
